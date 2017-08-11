@@ -74,7 +74,7 @@ configurations {
 }
 
 dependencies {
-    compile 'com.datastax.cassandra:cassandra-driver-core:3.1.0'
+    compile 'com.datastax.cassandra:cassandra-driver-core:3.3.0'
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'com.google.code.findbugs:jsr305:3.0.0'
 
@@ -86,9 +86,9 @@ dependencies {
     testCompile 'org.powermock:powermock-api-mockito:1.6.5'
     testCompile 'org.powermock:powermock-module-junit4:1.6.5'
 
-    testCompile 'org.scassandra:java-client:1.0.3'
+    testCompile 'org.scassandra:java-client:1.1.2'
 
-    testCompileAndFunctional 'org.cassandraunit:cassandra-unit:3.0.0.1'
+    testCompileAndFunctional 'org.cassandraunit:cassandra-unit:3.1.3.2'
     functional 'org.slf4j:slf4j-simple:1.7.12'
 }
 
@@ -139,4 +139,18 @@ check.dependsOn(functional, javadoc)
 
 test {
     jvmArgs '-Dcassandra.storagedir=/tmp/cassandra'
+}
+
+shadowJar {
+    classifier = "uber"
+}
+
+uploadShadow {
+    repositories {
+        mavenDeployer {
+            repository(url: "https://nexus.dev.omniscopy.com/repository/maven-snapshots/") {
+                authentication(userName: ldapUser, password: ldapPassword)
+            }
+        }
+    }
 }
